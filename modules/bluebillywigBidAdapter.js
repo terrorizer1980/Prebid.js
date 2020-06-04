@@ -63,10 +63,6 @@ export const BB_HELPERS = {
       utils.deepSetValue(request, 'user.ext.eids', eids);
     }
   },
-  addDigiTrust: function(request, bidRequests) {
-    const digiTrust = BB_HELPERS.getDigiTrustParams(bidRequests && bidRequests[0]);
-    if (digiTrust) utils.deepSetValue(request, 'user.ext.digitrust', digiTrust);
-  },
   substituteUrl: function (url, publication, renderer) {
     return url.replace('$$URL_START', (DEV_MODE) ? 'https://dev.' : 'https://').replace('$$PUBLICATION', publication).replace('$$RENDERER', renderer);
   },
@@ -78,22 +74,6 @@ export const BB_HELPERS = {
   },
   getRendererUrl: function(publication, renderer) {
     return BB_HELPERS.substituteUrl(BB_CONSTANTS.RENDERER_URL, publication, renderer);
-  },
-  getDigiTrustParams: function(bidRequest) {
-    const digiTrustId = BB_HELPERS.getDigiTrustId(bidRequest);
-
-    if (!digiTrustId || (digiTrustId.privacy && digiTrustId.privacy.optout)) return null;
-    return {
-      id: digiTrustId.id,
-      keyv: digiTrustId.keyv
-    }
-  },
-  getDigiTrustId: function(bidRequest) {
-    const bidRequestDigiTrust = utils.deepAccess(bidRequest, 'userId.digitrustid.data');
-    if (bidRequestDigiTrust) return bidRequestDigiTrust;
-
-    const digiTrustUser = getConfig('digiTrustId');
-    return (digiTrustUser && digiTrustUser.success && digiTrustUser.identity) || null;
   },
   transformRTBToPrebidProps: function(bid, serverResponse) {
     bid.cpm = bid.price; delete bid.price;
@@ -293,7 +273,6 @@ export const spec = {
     BB_HELPERS.addSchain(request, validBidRequests);
     BB_HELPERS.addCurrency(request);
     BB_HELPERS.addUserIds(request, validBidRequests);
-    BB_HELPERS.addDigiTrust(request, validBidRequests);
 
     return {
       method: 'POST',

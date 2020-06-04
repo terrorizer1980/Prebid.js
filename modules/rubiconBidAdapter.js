@@ -12,17 +12,6 @@ export const VIDEO_ENDPOINT = 'https://prebid-server.rubiconproject.com/openrtb2
 export const SYNC_ENDPOINT = 'https://eus.rubiconproject.com/usync.html';
 
 const GVLID = 52;
-const DIGITRUST_PROP_NAMES = {
-  FASTLANE: {
-    id: 'dt.id',
-    keyv: 'dt.keyv',
-    pref: 'dt.pref'
-  },
-  PREBID_SERVER: {
-    id: 'id',
-    keyv: 'keyv'
-  }
-};
 
 var sizeMap = {
   1: '468x60',
@@ -220,11 +209,6 @@ export const spec = {
       appendSiteAppDevice(data, bidRequest, bidderRequest);
 
       addVideoParameters(data, bidRequest);
-
-      const digiTrust = _getDigiTrustQueryParams(bidRequest, 'PREBID_SERVER');
-      if (digiTrust) {
-        utils.deepSetValue(data, 'user.ext.digitrust', digiTrust);
-      }
 
       if (bidderRequest.gdprConsent) {
         // note - gdprApplies & consentString may be undefined in certain use-cases for consentManagement module
@@ -592,10 +576,6 @@ export const spec = {
       data['tg_i.dfp_ad_unit_code'] = pbAdSlot.replace(/^\/+/, '');
     }
 
-    // digitrust properties
-    const digitrustParams = _getDigiTrustQueryParams(bidRequest, 'FASTLANE');
-    Object.assign(data, digitrustParams);
-
     if (config.getConfig('coppa') === true) {
       data['coppa'] = 1;
     }
@@ -825,38 +805,6 @@ export const spec = {
 
 function _getScreenResolution() {
   return [window.screen.width, window.screen.height].join('x');
-}
-
-function _getDigiTrustQueryParams(bidRequest = {}, endpointName) {
-  if (!endpointName || !DIGITRUST_PROP_NAMES[endpointName]) {
-    return null;
-  }
-  const propNames = DIGITRUST_PROP_NAMES[endpointName];
-
-  function getDigiTrustId() {
-    const bidRequestDigitrust = utils.deepAccess(bidRequest, 'userId.digitrustid.data');
-    if (bidRequestDigitrust) {
-      return bidRequestDigitrust;
-    }
-
-    let digiTrustUser = (window.DigiTrust && (config.getConfig('digiTrustId') || window.DigiTrust.getUser({member: 'T9QSFKPDN9'})));
-    return (digiTrustUser && digiTrustUser.success && digiTrustUser.identity) || null;
-  }
-
-  let digiTrustId = getDigiTrustId();
-  // Verify there is an ID and this user has not opted out
-  if (!digiTrustId || (digiTrustId.privacy && digiTrustId.privacy.optout)) {
-    return null;
-  }
-
-  const digiTrustQueryParams = {
-    [propNames.id]: digiTrustId.id,
-    [propNames.keyv]: digiTrustId.keyv
-  };
-  if (propNames.pref) {
-    digiTrustQueryParams[propNames.pref] = 0;
-  }
-  return digiTrustQueryParams;
 }
 
 /**

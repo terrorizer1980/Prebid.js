@@ -103,9 +103,6 @@ export const spec = {
       if (payloadUserId.id5id) {
         payload.id5 = payloadUserId.id5id;
       }
-      if (payloadUserId.digitrustid && payloadUserId.digitrustid.data && payloadUserId.digitrustid.data.id) {
-        payload.dtid = payloadUserId.digitrustid.data.id;
-      }
     }
 
     if (bidderRequest) {

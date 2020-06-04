@@ -18,8 +18,6 @@ export const spec = {
   },
 
   buildRequests: function(validBidRequests, bidderRequest) {
-    let digitrust;
-
     let ret = {
       method: 'POST',
       url: '',
@@ -67,22 +65,6 @@ export const spec = {
     // CCPA
     if (bidderRequest.uspConsent) {
       utils.deepSetValue(data, 'user.ext.us_privacy', bidderRequest.uspConsent);
-    }
-
-    // Digitrust Support
-    const bidRequestDigitrust = utils.deepAccess(validBidRequests[0], 'userId.digitrustid.data');
-    if (bidRequestDigitrust && (!bidRequestDigitrust.privacy || !bidRequestDigitrust.privacy.optout)) {
-      digitrust = {
-        id: bidRequestDigitrust.id,
-        keyv: bidRequestDigitrust.keyv
-      }
-    }
-
-    if (digitrust) {
-      utils.deepSetValue(data, 'user.ext.digitrust', {
-        id: digitrust.id,
-        keyv: digitrust.keyv
-      })
     }
 
     if (validBidRequests[0].userId && typeof validBidRequests[0].userId === 'object' && (validBidRequests[0].userId.tdid || validBidRequests[0].userId.pubcid || validBidRequests[0].userId.lipb || validBidRequests[0].userId.id5id || validBidRequests[0].userId.parrableid)) {

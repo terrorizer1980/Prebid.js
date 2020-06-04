@@ -430,18 +430,6 @@ function user(bidRequest, bidderRequest) {
       addExternalUserId(ext.eids, bidRequest.userId.tdid, 'adserver.org', {
         rtiPartner: 'TDID'
       });
-      // digitrust
-      const digitrustResponse = bidRequest.userId.digitrustid;
-      if (digitrustResponse && digitrustResponse.data) {
-        var digitrust = {};
-        if (digitrustResponse.data.id) {
-          digitrust.id = digitrustResponse.data.id;
-        }
-        if (digitrustResponse.data.keyv) {
-          digitrust.keyv = digitrustResponse.data.keyv;
-        }
-        ext.digitrust = digitrust;
-      }
     }
   }
   return { ext };

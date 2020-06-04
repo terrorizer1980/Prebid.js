@@ -25,18 +25,8 @@ export const spec = {
       let sovrnImps = [];
       let iv;
       let schain;
-      let digitrust;
 
       utils._each(bidReqs, function (bid) {
-        if (!digitrust) {
-          const bidRequestDigitrust = utils.deepAccess(bid, 'userId.digitrustid.data');
-          if (bidRequestDigitrust && (!bidRequestDigitrust.privacy || !bidRequestDigitrust.privacy.optout)) {
-            digitrust = {
-              id: bidRequestDigitrust.id,
-              keyv: bidRequestDigitrust.keyv
-            }
-          }
-        }
         if (bid.schain) {
           schain = schain || bid.schain;
         }
@@ -86,13 +76,6 @@ export const spec = {
       }
       if (bidderRequest.uspConsent) {
         utils.deepSetValue(sovrnBidReq, 'regs.ext.us_privacy', bidderRequest.uspConsent);
-      }
-
-      if (digitrust) {
-        utils.deepSetValue(sovrnBidReq, 'user.ext.digitrust', {
-          id: digitrust.id,
-          keyv: digitrust.keyv
-        })
       }
 
       let url = `https://ap.lijit.com/rtb/bid?` +

@@ -11,7 +11,6 @@ const BIDDER_VERSION = '3.0.2';
 export const USER_ID_CODE_TO_QUERY_ARG = {
   britepoolid: 'britepoolid', // BritePool ID
   criteoId: 'criteoid', // CriteoID
-  digitrustid: 'digitrustid', // DigiTrust
   id5id: 'id5id', // ID5 ID
   idl_env: 'lre', // LiveRamp IdentityLink
   lipb: 'lipbid', // LiveIntent ID
@@ -270,9 +269,6 @@ function appendUserIdsToQueryParams(queryParams, userIds) {
 
     if (USER_ID_CODE_TO_QUERY_ARG.hasOwnProperty(userIdProviderKey)) {
       switch (userIdProviderKey) {
-        case 'digitrustid':
-          queryParams[key] = utils.deepAccess(userIdObjectOrValue, 'data.id');
-          break;
         case 'lipb':
           queryParams[key] = userIdObjectOrValue.lipbid;
           break;

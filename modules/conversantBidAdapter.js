@@ -331,7 +331,6 @@ function collectEids(bidRequests) {
       'criteo.com': 1,
       'id5-sync.com': 1,
       'parrable.com': 1,
-      'digitru.st': 1,
       'liveintent.com': 1
     };
     request.userIdAsEids.forEach(function(eid) {

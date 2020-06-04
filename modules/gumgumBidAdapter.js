@@ -88,17 +88,6 @@ function _getTradeDeskIDParam(userId) {
   return unifiedIdObj;
 }
 
-function _getDigiTrustQueryParams(userId) {
-  let digiTrustId = userId.digitrustid && userId.digitrustid.data;
-  // Verify there is an ID and this user has not opted out
-  if (!digiTrustId || (digiTrustId.privacy && digiTrustId.privacy.optout)) {
-    return {};
-  }
-  return {
-    dt: digiTrustId.id
-  };
-}
-
 /**
  * Serializes the supply chain object according to IAB standards
  * @see https://github.com/InteractiveAdvertisingBureau/openrtb/blob/master/supplychainobject.md
@@ -266,7 +255,7 @@ function buildRequests (validBidRequests, bidderRequest) {
       sizes: bannerSizes || bidRequest.sizes,
       url: BID_ENDPOINT,
       method: 'GET',
-      data: Object.assign(data, _getBrowserParams(topWindowUrl), _getDigiTrustQueryParams(userId), _getTradeDeskIDParam(userId))
+      data: Object.assign(data, _getBrowserParams(topWindowUrl), _getTradeDeskIDParam(userId))
     })
   });
   return bids;
