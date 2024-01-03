@@ -112,6 +112,6 @@
     "jsencrypt": "^3.0.0-rc.1",
     "just-clone": "^1.0.2",
     "live-connect-js": "1.1.1",
-    "core-js-pure": "^3.6.5"
+    "core-js-pure": "^3.34.0"
   }
 }
